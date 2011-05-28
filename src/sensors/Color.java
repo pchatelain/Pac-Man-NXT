@@ -1,5 +1,11 @@
 package sensors;
 
 public enum Color {
-	BLACK, GREY, WHITE
+	BLACK(0), GREY(50), WHITE(100);
+	
+	public int value;
+	
+	private Color(int value) {
+		this.value = value;
+	}
 }

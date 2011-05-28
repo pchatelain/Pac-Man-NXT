@@ -106,6 +106,14 @@ public class DoubleSensor {
 	public Color getRightColor() {
 		return rightSensor.getColor();
 	}
+
+	public int getLeftNormalized() {
+		return leftSensor.getNormalizedLightValue();
+	}
+	
+	public int getRightNormalized() {
+		return rightSensor.getNormalizedLightValue();
+	}
 	
 	public void reset() {
 		leftSensor.reset();
