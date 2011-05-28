@@ -1,6 +1,5 @@
 package sensors;
 
-import io.DataTimeLogger;
 import lejos.nxt.Button;
 import lejos.nxt.ColorLightSensor;
 import lejos.nxt.LCD;
@@ -13,7 +12,6 @@ public class ColorSensor {
 	   private int whiteLightValue;
 	   private int blackGreyThreshold;
 	   private int whiteGreyThreshold;
-	   private DataTimeLogger data;
 
 	   protected void setBlackLightValue(int blackLightValue) {
 		   this.blackLightValue = blackLightValue;
@@ -28,7 +26,6 @@ public class ColorSensor {
 		   ls = new ColorLightSensor(p, ColorLightSensor.TYPE_REFLECTION); 
 		   // Use the light sensor as a reflection sensor
 		   ls.setFloodlight(true);
-		   data = new DataTimeLogger("lightValues_left.txt");
 	   }
 
 	   private int read(String color){
@@ -110,7 +107,6 @@ public class ColorSensor {
 	   
 	   public Color getColor() {
 		   int value = ls.readValue();
-		   data.writeSample(value);
 		   if (value < blackGreyThreshold)
 			   return Color.BLACK;
 		   if (value > whiteGreyThreshold)
@@ -120,14 +116,6 @@ public class ColorSensor {
 	   
 	   public int light() {
 	 	   return ls.readValue();
-	   }
-	   
-	   public void close() {
-		   data.close();
-	   }
-	   
-	   public void reset() {
-		   data.reset();
 	   }
 	   
 	   public int getLightValue() {

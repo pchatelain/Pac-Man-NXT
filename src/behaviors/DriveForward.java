@@ -2,12 +2,12 @@ package behaviors;
 
 import io.Instructions;
 import lejos.nxt.MotorPort;
-import lejos.nxt.Sound;
 import lejos.robotics.subsumption.Behavior;
 import robot.LineFollower;
 import sensors.Color;
 import sensors.DoubleSensor;
 import tools.Car;
+
 
 public class DriveForward implements Behavior {
 	private boolean _suppressed;
@@ -35,6 +35,7 @@ public class DriveForward implements Behavior {
 	}
 
 	public boolean takeControl() {
+		
 		return (LineFollower.instruction == Instructions.START);
 	}
 
@@ -44,7 +45,6 @@ public class DriveForward implements Behavior {
 
 	public void action() {
 		_suppressed = false;
-		sensor.reset();
 		Car.forward(minPower, minPower);
 		while (!_suppressed) {
 			try {

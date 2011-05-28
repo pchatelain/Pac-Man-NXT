@@ -114,16 +114,5 @@ public class DoubleSensor {
 	public int getRightNormalized() {
 		return rightSensor.getNormalizedLightValue();
 	}
-	
-	public void reset() {
-		leftSensor.reset();
-		rightSensor.reset();
-	}
-	
-	public void close() {
-		leftSensor.close();
-		rightSensor.close();
-	}
-	
 }
 	

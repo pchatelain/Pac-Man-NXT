@@ -1,12 +1,12 @@
 package behaviors;
 
+import io.Instructions;
+import io.LineDisplayWriter;
+import lejos.robotics.subsumption.Behavior;
 import robot.LineFollower;
 import sensors.Color;
 import sensors.DoubleSensor;
 import tools.Car;
-import io.Instructions;
-import lejos.nxt.MotorPort;
-import lejos.robotics.subsumption.Behavior;
 
 public class TurnRight implements Behavior {
 
@@ -14,22 +14,11 @@ public class TurnRight implements Behavior {
 	private DoubleSensor sensor;
 	private int leftPower;
 	private int rightPower;
-	private int power;
-	private Color leftLastColor;
-	private Color rightLastColor;
-	private boolean dot;
-	
-	private static MotorPort leftMotor = MotorPort.C;
-    private static MotorPort rightMotor = MotorPort.B;
 	
     public TurnRight(DoubleSensor sensor) {
     	this.sensor = sensor;
-    	this.leftPower = 75;
-    	this.rightPower = 45;
-    	this.power = 60;
-    	this.leftLastColor = Color.WHITE;
-    	this.rightLastColor = Color.WHITE;
-    	this.dot = false;
+    	leftPower = 100;
+    	rightPower = -40;
     }
 
     public boolean takeControl() {
@@ -39,39 +28,32 @@ public class TurnRight implements Behavior {
     public void suppress() {
     	_suppressed = true;
     }
-
+    
+    int calls = 0;
     public void action() {
     	_suppressed = false;
-    	Car.forward(leftPower, 0);
-    	while (!_suppressed) {
-    		Car.forward(leftPower, 0);
-    		switch(sensor.getLeftColor()) {
-    		case BLACK:
-    			_suppressed = true;
-    			break;
-    		case WHITE:
-    		case GREY:
-    			break;
-    		}
-    		/*switch(sensor.getRightColor()) {
-    		case BLACK:
-    			_suppressed = true;
-    			break;
-    		case WHITE:
-    		case GREY:
-    			break;
-    		}*/
-    		if (!_suppressed) {
+    	int greyCount = 0;
+    	for(int i = 0; i < 10 && !_suppressed; i++) {
+    		if(sensor.getRightColor() == Color.GREY && sensor.getLeftColor() == Color.GREY)
+    			greyCount++;
+    		if(greyCount > 5) {
+        		Car.forward(leftPower, rightPower);
     			try {
-    				Thread.sleep(100);
+    				Thread.sleep(500);
     			} catch (InterruptedException e) {
     				Car.stop();
     				System.exit(1);
     			}
+    			break;
     		}
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				Car.stop();
+				System.exit(1);
+			}
     	}
+		Car.forward(leftPower, leftPower);
     	LineFollower.instruction = Instructions.START;
-    	leftPower = 75;
-    	rightPower = 45;
     }
 }

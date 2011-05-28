@@ -1,16 +1,13 @@
 package behaviors;
 
-import sensors.DoubleSensor;
-import tools.Car;
 import lejos.nxt.Button;
 import lejos.robotics.subsumption.Behavior;
+import sensors.DoubleSensor;
+import tools.Car;
 
 public class ExitBehavior implements Behavior {
 
-	private DoubleSensor sensor;
-	
 	public ExitBehavior(DoubleSensor sensor) {
-		this.sensor = sensor;
 	}
 
 	public boolean takeControl() {
@@ -24,7 +21,6 @@ public class ExitBehavior implements Behavior {
 
 	public void action() {
 		Car.stop();
-		sensor.close();
 		System.exit(0);
 	}
 }
