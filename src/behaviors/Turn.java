@@ -6,7 +6,6 @@ import lejos.robotics.subsumption.Behavior;
 import sensors.DoubleSensor;
 import tools.Car;
 import tools.Configurable;
-import tools.Configurator;
 
 public class Turn implements Behavior, Configurable {
 
@@ -34,9 +33,9 @@ public class Turn implements Behavior, Configurable {
 	
     public Turn(DoubleSensor sensor) {
     	this.sensor = sensor;
-    	String[] settings = {"thresh", "min", "max", "diff", "sleep"};
-        Configurator conf = new Configurator(this, settings);
-        conf.listen();
+//    	String[] settings = {"thresh", "min", "max", "diff", "sleep"};
+//        Configurator conf = new Configurator(this, settings);
+//        conf.listen();
     }
     
     private int greyCount = 0;
