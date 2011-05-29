@@ -16,10 +16,20 @@ public class Turn implements Behavior, Configurable {
 	private int meanPower = 85;
 	private int lowPower = -60;
 
-//	private Direction[] sequence = {Direction.FORWARD};
-	private Direction[] sequence = {
-			Direction.FORWARD, Direction.FORWARD, Direction.RIGHT,
-			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.RIGHT};
+	private Direction[] sequence = {Direction.FORWARD};
+//	private Direction[] sequence = {
+//			Direction.FORWARD, Direction.FORWARD,
+//			Direction.RIGHT,
+//			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
+//			Direction.FORWARD, Direction.LEFT, Direction.LEFT, Direction.FORWARD, 
+//			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
+//			Direction.FORWARD, Direction.LEFT, Direction.FORWARD,
+//			Direction.FORWARD, Direction.FORWARD,
+//			Direction.FORWARD, Direction.LEFT, Direction.FORWARD,
+//			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
+//			Direction.FORWARD, Direction.LEFT, Direction.LEFT,Direction.FORWARD, 
+//			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
+//			Direction.RIGHT};
 	private int seqPos = 0;
 	
     public Turn(DoubleSensor sensor) {
@@ -30,10 +40,10 @@ public class Turn implements Behavior, Configurable {
     }
     
     private int greyCount = 0;
-    private int thresh = 8;
-    private int min = 105;
-    private int max = 170;
-    private int diff = 20;
+    private int thresh = 5;
+    private int min = 95;
+    private int max = 180;
+    private int diff = 15;
 
     private long longDist = 1900;
     private long shortDist = 785;
@@ -45,7 +55,7 @@ public class Turn implements Behavior, Configurable {
     		if(min < left+right && left+right < max)
     			greyCount += 2;
 		greyCount = Math.max(0, greyCount);
-    	LineDisplayWriter.setLine(left+"  "+right, 6, true);
+    	LineDisplayWriter.setLine("Light: "+right+"  "+left, 6, true);
     	int threshhold = thresh;
     	if(Math.abs(System.currentTimeMillis() - lastRun - longDist) < 50)
     		threshhold /= 2;
@@ -57,12 +67,12 @@ public class Turn implements Behavior, Configurable {
     }
     
     private long lastRun = 0;
-    private long repeatThreshhold = shortDist-50;
+    private long repeatThreshhold = shortDist;
     private int sleep = 360;
     public void action() {
     	if(System.currentTimeMillis() - lastRun < repeatThreshhold)
     		return;
-    	LineDisplayWriter.setLine(Long.toString(System.currentTimeMillis() - lastRun), 2, true);
+//    	LineDisplayWriter.setLine(Long.toString(System.currentTimeMillis() - lastRun), 2, true);
     	lastRun = System.currentTimeMillis();
     	if(seqPos == sequence.length)
     		seqPos = 0;
@@ -71,7 +81,7 @@ public class Turn implements Behavior, Configurable {
     	case FORWARD:
     		Car.forward(meanPower, meanPower);
     		Sound.playTone(400, 100);
-    		sleep(100);
+    		sleep(50);
     		break;
     	case LEFT:
     		Car.forward(lowPower, fullPower);
