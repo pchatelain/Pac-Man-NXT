@@ -70,10 +70,10 @@ public class LineFollowerPID implements Configurable
 	    	 powerLeft = (int)(Tp + turn);
 	    	 powerRight = (int)(Tp);
 	     }
-	     LineDisplayWriter.addLine("Deriv.: " + derivative, 1);
-	     LineDisplayWriter.addLine("  Err.: " + error, 2);
-	     LineDisplayWriter.addLine("  Turn: " + turn, 3);
-	     LineDisplayWriter.addLine(" Power: " + powerLeft + "/" + powerRight, 4);
+	     LineDisplayWriter.setLine("Deriv.: " + derivative, 1);
+	     LineDisplayWriter.setLine("  Err.: " + error, 2);
+	     LineDisplayWriter.setLine("  Turn: " + turn, 3);
+	     LineDisplayWriter.setLine(" Power: " + powerLeft + "/" + powerRight, 4);
 	     LineDisplayWriter.refresh();
 	     
 	     Car.forward(powerLeft, powerRight);

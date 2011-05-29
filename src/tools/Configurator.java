@@ -12,10 +12,16 @@ public class Configurator implements ButtonListener {
 	private int currentSetting;
 	private boolean adjustSetting;
 	private boolean listen = false;
-	
+	private int line;
+
 	public Configurator(Configurable instance, String[] settings) {
+		this(instance, settings, 7);
+	}
+	
+	public Configurator(Configurable instance, String[] settings, int line) {
 		this.instance = instance;
 		this.settings = settings;
+		this.line = line;
 		currentSetting = 0;
 		adjustSetting = false;
 		refreshSetting();
@@ -34,9 +40,9 @@ public class Configurator implements ButtonListener {
 	
 	public void refreshSetting() {
 		if(adjustSetting)
-			LineDisplayWriter.writeLine(settings[currentSetting]+":["+instance.getSettingValue(currentSetting)+"]", 7);
+			LineDisplayWriter.setLine(settings[currentSetting]+":["+instance.getSettingValue(currentSetting)+"]", line, true);
 		else
-			LineDisplayWriter.writeLine(settings[currentSetting]+": "+instance.getSettingValue(currentSetting), 7);
+			LineDisplayWriter.setLine(settings[currentSetting]+": "+instance.getSettingValue(currentSetting), line, true);
 	}
 	
 	public void selectNextSetting() {

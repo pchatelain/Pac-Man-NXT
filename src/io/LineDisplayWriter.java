@@ -6,28 +6,32 @@ public class LineDisplayWriter {
 	
 	public static int lineLength = 17;
 	
-	/**
-	 * Write one line to the display and refreshes it.
-	 * @param string
-	 * @param line
-	 */
-	public static void writeLine(String string, int line) {
-		addLine(string, line);
-		refresh();
+	public static String[] cleared = {
+		"                 ",
+		"                 ",
+		"                 ",
+		"                 ",
+		"                 ",
+		"                 ",
+		"                 ",
+		"                 "};
+	public static String[] lines = cleared;
+	
+	public static void setLine(String string, int line) {
+		setLine(string, line, false);
 	}
 	
-	/**
-	 * You will need to call refresh in order
-	 * for the line to show up on the display.
-	 * @param string
-	 * @param line The line to write to. Between 1 and 7.
-	 */
-	public static void addLine(String string, int line) {
+	public static void setLine(String string, int line, boolean refresh) {
+		if(line >= lines.length)
+			line = lines.length-1;
 		if(string.length() > lineLength)
 			string = string.substring(0, lineLength);
 		else if(string.length() < lineLength)
 			string = string + repeatString(" ", lineLength - string.length());
+		lines[line] = string;
 		LCD.drawString(string, 0, line);
+		if(refresh)
+			LCD.refresh();
 	}
 	
 	private static String repeatString(String string, int times) {
@@ -35,6 +39,11 @@ public class LineDisplayWriter {
 		for(int i = 1; i <= times; i++)
 			repeatedString = repeatedString + string;
 		return repeatedString;
+	}
+	
+	public static void clear() {
+		lines = cleared;
+		LCD.clear();
 	}
 	
 	public static void refresh() {
