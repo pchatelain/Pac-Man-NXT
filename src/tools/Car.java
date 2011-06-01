@@ -1,6 +1,5 @@
 package tools;
-import io.Instructions;
-import lejos.nxt.*;
+import lejos.nxt.MotorPort;
 /**
  * A locomotion module with methods to drive
  * a car with two independent motors. The left motor 
@@ -19,8 +18,6 @@ public class Car
 	                         
     private static MotorPort leftMotor = MotorPort.C;
     private static MotorPort rightMotor= MotorPort.B;
-    
-    private static int speed;
     
     private Car()
     {	   
@@ -44,15 +41,4 @@ public class Car
 	    rightMotor.controlMotor(rightPower,backward);
     }
     
-    public static void followInstruction(int inst) {
-    	switch (inst) {
-    	case Instructions.DOT: break; // TODO
-    	case Instructions.LEFT: forward(0, speed); break;
-    	case Instructions.RIGHT: forward(speed, 0); break;
-    	case Instructions.START: forward(speed, speed); break;
-    	case Instructions.STOP: stop(); break;
-    	case Instructions.U_TURN: break; // TODO
-    	default: if (inst <= 100) speed = inst; forward(speed, speed);
-    	}
-    }
 }
