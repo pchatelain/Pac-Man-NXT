@@ -1,5 +1,7 @@
 package behaviors;
 
+import java.io.IOException;
+
 import io.BTReceiver;
 import io.LineDisplayWriter;
 import lejos.nxt.Sound;
@@ -61,36 +63,40 @@ public class Turn2 implements Behavior, Configurable {
     		return;
     	lastRun = System.currentTimeMillis();
     	suppressed = false;
-    	switch(receiver.nextInstruction()) {
-    	case START:
-    	case DOT:
-    		Car.forward(meanPower, meanPower);
-    		Sound.playTone(400, 100);
-    		sleep(50);
-    		break;
-    	case LEFT:
-    		Car.forward(lowPower, fullPower);
-    		Sound.playTone(250, 100);
-    		sleep(sleep);
-    		break;
-    	case RIGHT:
-    		Car.forward(fullPower, lowPower);
-    		Sound.playTone(600, 100);
-    		sleep(sleep);
-    		break;
-    	case STOP:
-    		Sound.playTone(600, 100);
-    		Car.stop();
-    		break;
-    	case EOT:
-    		Car.stop();
-    		System.exit(0);
-    	default:
-    		Car.forward(meanPower, meanPower);
-    		Sound.playTone(400, 100);
-    		sleep(50);
-    		break;
-    	}
+    	try {
+			switch(receiver.nextInstruction()) {
+			case START:
+			case DOT:
+				Car.forward(meanPower, meanPower);
+				Sound.playTone(400, 100);
+				sleep(50);
+				break;
+			case LEFT:
+				Car.forward(lowPower, fullPower);
+				Sound.playTone(250, 100);
+				sleep(sleep);
+				break;
+			case RIGHT:
+				Car.forward(fullPower, lowPower);
+				Sound.playTone(600, 100);
+				sleep(sleep);
+				break;
+			case STOP:
+				Sound.playTone(600, 100);
+				Car.stop();
+				break;
+			case EOT:
+				Car.stop();
+				System.exit(0);
+			default:
+				Car.forward(meanPower, meanPower);
+				Sound.playTone(400, 100);
+				sleep(50);
+				break;
+			}
+		} catch (IOException e) {
+			System.exit(1);
+		}
     	greyCount = 0;
     }
     

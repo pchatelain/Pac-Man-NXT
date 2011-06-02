@@ -1,7 +1,7 @@
 package io;
 
 public enum Instruction {
-	START, STOP, RIGHT, LEFT, DOT, U_TURN, UNKNOWN, EOT;
+	START, STOP, RIGHT, LEFT, DOT, U_TURN, UNKNOWN, NONE, EOT;
 	
 	public static String stringOf(Instruction inst) {
 		switch (inst) {
@@ -12,6 +12,7 @@ public enum Instruction {
 		case DOT: return "dot";
 		case U_TURN: return "u_turn";
 		case UNKNOWN: return "unknown";
+		case NONE: return "none";
 		case EOT: return "eot";
 		default: return "";
 		}

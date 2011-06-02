@@ -3,7 +3,6 @@ package io;
 import java.io.IOException;
 import java.io.InputStream;
 
-import lejos.nxt.LCD;
 import lejos.nxt.comm.Bluetooth;
 import lejos.nxt.comm.NXTConnection;
 
@@ -19,13 +18,17 @@ public class BTReceiver {
 	private InputStream in;
 	
 	public BTReceiver() {
-		LCD.drawString("Waiting for connection", 1, 1);
+		LineDisplayWriter.setLine("Waiting for", 0);
+		LineDisplayWriter.setLine("connection...", 1);
 		NXTConnection connection = Bluetooth.waitForConnection();
 		in = connection.openInputStream();
 	}
 	
 	public Instruction nextInstruction() throws IOException {
+		if (in.available() == 0)
+			return Instruction.NONE;
 		switch (in.read()) {
+		case -1: return Instruction.EOT;
 		case U_TURN: return Instruction.U_TURN;
 		case RIGHT: return Instruction.RIGHT;
 		case LEFT: return Instruction.LEFT;
