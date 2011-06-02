@@ -3,6 +3,7 @@ package behaviors;
 import io.LineDisplayWriter;
 import lejos.nxt.Sound;
 import lejos.robotics.subsumption.Behavior;
+import robot.LineFollower;
 import sensors.DoubleSensor;
 import tools.Car;
 import tools.Configurable;
@@ -38,29 +39,32 @@ public class Turn implements Behavior, Configurable {
 //        conf.listen();
     }
     
-    private int greyCount = 0;
-    private int thresh = 5;
-    private int min = 95;
-    private int max = 180;
-    private int diff = 15;
+    private static int greyCount = 0;
+    private static int thresh = 5;
+    private static int min = 95;
+    private static int max = 180;
+    private static int diff = 15;
 
     private long longDist = 1900;
     private long shortDist = 785;
     public boolean takeControl() {
     	int left = sensor.getLeftNormalized();
     	int right = sensor.getRightNormalized();
-		greyCount--;
-    	if(Math.abs(left-right) < diff)
-    		if(min < left+right && left+right < max)
-    			greyCount += 2;
-		greyCount = Math.max(0, greyCount);
+    	if(isGrey(left, right))
+			greyCount++;
+    	else if(greyCount > 0)
+    		greyCount--;
     	LineDisplayWriter.setLine("Light: "+right+"  "+left, 6, true);
     	int threshhold = thresh;
     	if(Math.abs(System.currentTimeMillis() - lastRun - longDist) < 50)
     		threshhold /= 2;
 		return greyCount > threshhold;
     }
-
+    
+    public static boolean isGrey(int left, int right) {
+    	return Math.abs(left-right) < diff && min < left+right && left+right < max;
+    }
+    
     public void suppress() {
     	suppressed = true;
     }
@@ -78,17 +82,20 @@ public class Turn implements Behavior, Configurable {
     	suppressed = false;
     	switch(sequence[seqPos]) {
     	case FORWARD:
-    		Car.forward(meanPower, meanPower);
+    		if(LineFollower.motor)
+    			Car.forward(meanPower, meanPower);
     		Sound.playTone(400, 100);
     		sleep(50);
     		break;
     	case LEFT:
-    		Car.forward(lowPower, fullPower);
+    		if(LineFollower.motor)
+    			Car.forward(lowPower, fullPower);
     		Sound.playTone(250, 100);
     		sleep(sleep);
     		break;
     	case RIGHT:
-    		Car.forward(fullPower, lowPower);
+    		if(LineFollower.motor)
+    			Car.forward(fullPower, lowPower);
     		Sound.playTone(600, 100);
     		sleep(sleep);
     		break;
