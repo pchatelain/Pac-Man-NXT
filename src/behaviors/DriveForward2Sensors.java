@@ -27,7 +27,7 @@ public class DriveForward2Sensors implements Behavior {
 		int meanPower = maxPower-(maxPower-minPower)/2;
 		while (!suppressed) {
 			double balance = sensor.getRightNormalized()-sensor.getLeftNormalized();
-			if(balance > 20)
+			if(Math.abs(balance) > 20)
 				balance *= 0.85;
 			int leftPower = (int) (meanPower-(maxPower-minPower)*balance/130);
 			int rightPower =(int) (meanPower+(maxPower-minPower)*balance/130);
