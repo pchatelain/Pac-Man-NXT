@@ -1,14 +1,10 @@
 package behaviors;
 
-import io.LineDisplayWriter;
 import lejos.robotics.subsumption.Behavior;
-import robot.LineFollower;
 import sensors.DoubleSensor;
 import tools.Car;
-import tools.Configurable;
-import tools.Configurator;
 
-public class DriveForward2Sensors implements Behavior, Configurable {
+public class DriveForward2Sensors implements Behavior {
 	private boolean suppressed;
 	private DoubleSensor sensor;
 	
@@ -30,7 +26,9 @@ public class DriveForward2Sensors implements Behavior, Configurable {
 		suppressed = false;
 		int meanPower = maxPower-(maxPower-minPower)/2;
 		while (!suppressed) {
-			int balance = sensor.getRightNormalized()-sensor.getLeftNormalized();
+			double balance = sensor.getRightNormalized()-sensor.getLeftNormalized();
+			if(balance > 20)
+				balance *= 0.85;
 			int leftPower = (int) (meanPower-(maxPower-minPower)*balance/130);
 			int rightPower =(int) (meanPower+(maxPower-minPower)*balance/130);
 			Car.forward(leftPower, rightPower);

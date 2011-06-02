@@ -7,6 +7,7 @@ import robot.LineFollower;
 import sensors.DoubleSensor;
 import tools.Car;
 import tools.Configurable;
+import tools.Configurator;
 
 public class Turn implements Behavior, Configurable {
 
@@ -16,34 +17,34 @@ public class Turn implements Behavior, Configurable {
 	private int meanPower = 85;
 	private int lowPower = -60;
 
-	private Direction[] sequence = {Direction.FORWARD};
-//	private Direction[] sequence = {
-//			Direction.FORWARD, Direction.FORWARD,
-//			Direction.RIGHT,
-//			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
-//			Direction.FORWARD, Direction.LEFT, Direction.LEFT, Direction.FORWARD, 
-//			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
-//			Direction.FORWARD, Direction.LEFT, Direction.FORWARD,
-//			Direction.FORWARD, Direction.FORWARD,
-//			Direction.FORWARD, Direction.LEFT, Direction.FORWARD,
-//			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
-//			Direction.FORWARD, Direction.LEFT, Direction.LEFT,Direction.FORWARD, 
-//			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
-//			Direction.RIGHT};
+//	private Direction[] sequence = {Direction.FORWARD};
+	private Direction[] sequence = {
+			Direction.FORWARD, Direction.FORWARD,
+			Direction.RIGHT,
+			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
+			Direction.FORWARD, Direction.LEFT, Direction.LEFT, Direction.FORWARD, 
+			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
+			Direction.FORWARD, Direction.LEFT, Direction.FORWARD,
+			Direction.FORWARD, Direction.FORWARD,
+			Direction.FORWARD, Direction.LEFT, Direction.FORWARD,
+			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
+			Direction.FORWARD, Direction.LEFT, Direction.LEFT,Direction.FORWARD, 
+			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
+			Direction.RIGHT};
 	private int seqPos = 0;
 	
     public Turn(DoubleSensor sensor) {
     	this.sensor = sensor;
-//    	String[] settings = {"thresh", "min", "max", "diff", "sleep"};
-//        Configurator conf = new Configurator(this, settings);
-//        conf.listen();
+    	String[] settings = {"thresh", "min", "max", "diff", "sleep"};
+        Configurator conf = new Configurator(this, settings);
+        conf.listen();
     }
     
     private static int greyCount = 0;
     private static int thresh = 5;
     private static int min = 95;
-    private static int max = 180;
-    private static int diff = 15;
+    private static int max = 190;
+    private static int diff = 11;
 
     private long longDist = 1900;
     private long shortDist = 785;
@@ -71,7 +72,7 @@ public class Turn implements Behavior, Configurable {
     
     private long lastRun = 0;
     private long repeatThreshhold = shortDist;
-    private int sleep = 360;
+    private int sleep = 300;
     public void action() {
     	if(System.currentTimeMillis() - lastRun < repeatThreshhold)
     		return;
