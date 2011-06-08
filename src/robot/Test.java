@@ -1,5 +1,7 @@
 package robot;
 
+import java.io.IOException;
+
 import io.BTReceiver;
 import io.LineDisplayWriter;
 import io.Instruction;
@@ -30,11 +32,21 @@ public class Test {
 		Behavior[] behaviorList = {b1, b2, b3};
 		Arbitrator arbitrator = new Arbitrator(behaviorList);
 
-		LineDisplayWriter.setLine("Waiting for first instruction", 0);
-		LineDisplayWriter.setLine("to start", 1);
+		LineDisplayWriter.setLine("Waiting for", 0);
+		LineDisplayWriter.setLine("first instruction", 1);
+		LineDisplayWriter.setLine("to start", 2);
 		LineDisplayWriter.refresh();
-		while(!Button.ENTER.isPressed());
-		while (!receiver.nextInstruction().equals(Instruction.START));
+		//while(!Button.ENTER.isPressed());
+		try {
+			while (!receiver.nextInstruction().equals(Instruction.START));
+		} catch (IOException e) {
+			try {
+				receiver.close();
+			} catch (IOException e1) {
+				System.exit(1);
+			}
+			System.exit(1);
+		}
 		LineDisplayWriter.clear();
 
 		arbitrator.start();

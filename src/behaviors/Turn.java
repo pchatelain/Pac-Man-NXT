@@ -16,10 +16,10 @@ public class Turn implements Behavior, Configurable {
 	private int meanPower = 85;
 	private int lowPower = -60;
 
-	private Direction[] sequence = {Direction.FORWARD};
-//	private Direction[] sequence = {
+//	private Direction[] sequence = {Direction.FORWARD};
+	private Direction[] sequence = {
 //			Direction.FORWARD, Direction.FORWARD,
-//			Direction.RIGHT,
+	Direction.RIGHT,Direction.FORWARD,Direction.FORWARD};
 //			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
 //			Direction.FORWARD, Direction.LEFT, Direction.LEFT, Direction.FORWARD, 
 //			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
@@ -41,11 +41,10 @@ public class Turn implements Behavior, Configurable {
     
     private int greyCount = 0;
     private int thresh = 5;
-    private int min = 95;
-    private int max = 180;
-    private int diff = 15;
+    private int min = 75;
+    private int max = 140;
+    private int diff = 18;
 
-    private long longDist = 1900;
     private long shortDist = 785;
     public boolean takeControl() {
     	int left = sensor.getLeftNormalized();
@@ -57,8 +56,6 @@ public class Turn implements Behavior, Configurable {
 		greyCount = Math.max(0, greyCount);
     	LineDisplayWriter.setLine("Light: "+right+"  "+left, 6, true);
     	int threshhold = thresh;
-    	if(Math.abs(System.currentTimeMillis() - lastRun - longDist) < 50)
-    		threshhold /= 2;
 		return greyCount > threshhold;
     }
 
@@ -68,7 +65,7 @@ public class Turn implements Behavior, Configurable {
     
     private long lastRun = 0;
     private long repeatThreshhold = shortDist;
-    private int sleep = 360;
+    private int sleep = 300;
     public void action() {
     	if(System.currentTimeMillis() - lastRun < repeatThreshhold)
     		return;

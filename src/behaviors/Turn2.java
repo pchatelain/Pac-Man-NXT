@@ -29,13 +29,11 @@ public class Turn2 implements Behavior, Configurable {
     }
     
     private int greyCount = 0;
-    private int thresh = 5;
-    private int min = 95;
-    private int max = 180;
-    private int diff = 15;
+    private int thresh = 6;
+    private int min = 75;
+    private int max = 130;
+    private int diff = 18;
 
-    private long longDist = 1900;
-    private long shortDist = 785;
     public boolean takeControl() {
     	int left = sensor.getLeftNormalized();
     	int right = sensor.getRightNormalized();
@@ -46,8 +44,6 @@ public class Turn2 implements Behavior, Configurable {
 		greyCount = Math.max(0, greyCount);
     	LineDisplayWriter.setLine("Light: "+right+"  "+left, 6, true);
     	int threshhold = thresh;
-    	if(Math.abs(System.currentTimeMillis() - lastRun - longDist) < 50)
-    		threshhold /= 2;
 		return greyCount > threshhold;
     }
 
@@ -56,8 +52,8 @@ public class Turn2 implements Behavior, Configurable {
     }
     
     private long lastRun = 0;
-    private long repeatThreshhold = shortDist;
-    private int sleep = 360;
+    private long repeatThreshhold = 785;
+    private int sleep = 300;
     public void action() {
     	if(System.currentTimeMillis() - lastRun < repeatThreshhold)
     		return;
