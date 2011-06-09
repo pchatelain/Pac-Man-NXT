@@ -16,7 +16,6 @@ public class Turn implements Behavior, Configurable {
 	private Instructor instructor;
 	
 	private int fullPower = 100;
-	private int meanPower = 85;
 	private int lowPower = -60;
 	
     public Turn(DoubleSensor sensor, Instructor instructor) {
@@ -37,13 +36,17 @@ public class Turn implements Behavior, Configurable {
     public boolean takeControl() {
     	int left = sensor.getLeftNormalized();
     	int right = sensor.getRightNormalized();
-    	if(isGrey(left, right))
+    	if(Math.abs(left-right) < diff
+    	&& min < left+right && left+right < max)
 			greyCount++;
     	else if(greyCount > 0)
     		greyCount--;
     	LineDisplayWriter.setLine("Light: "+right+"  "+left, 6, true);
 		if(greyCount > threshhold) {
-			if(instructor.peek() == Instruction.FORWARD) {
+			Instruction peek = instructor.peek();
+			if(peek == Instruction.START
+			|| peek == Instruction.FORWARD
+			|| peek == Instruction.DOT) {
 		    	greyCount = 0;
 		    	return false;
 			}
@@ -51,10 +54,6 @@ public class Turn implements Behavior, Configurable {
 		} else {
 			return false;
 		}
-    }
-    
-    public static boolean isGrey(int left, int right) {
-    	return Math.abs(left-right) < diff && min < left+right && left+right < max;
     }
     
     public void suppress() {
@@ -69,35 +68,48 @@ public class Turn implements Behavior, Configurable {
     		return;
     	lastRun = System.currentTimeMillis();
     	suppressed = false;
-    	
+
+    	int left = sensor.getLeftNormalized();
+    	int right = sensor.getRightNormalized();
 		switch(instructor.next()) {
-		case START:
-		case DOT:
-			Car.forward(meanPower, meanPower);
-			Sound.playTone(400, 100);
-			sleep(50);
-			break;
 		case LEFT:
 			Car.forward(lowPower, fullPower);
 			Sound.playTone(250, 100);
-			sleep(sleep);
+			while(left > 40) {
+		    	left = sensor.getLeftNormalized();
+				sleep(10);
+			}
 			break;
 		case RIGHT:
 			Car.forward(fullPower, lowPower);
 			Sound.playTone(600, 100);
-			sleep(sleep);
+			while(right > 40) {
+				right = sensor.getLeftNormalized();
+				sleep(10);
+			}
 			break;
 		case STOP:
-			Sound.playTone(400, 100);
 			Car.stop();
+			Sound.playTone(100, 100);
 			break;
 		case EOT:
 			Car.stop();
+			Sound.playTone(500, 100);
+			Sound.playTone(100, 100);
 			System.exit(0);
 		default:
-			Car.forward(meanPower, meanPower);
-			Sound.playTone(400, 100);
-			sleep(50);
+			Car.stop();
+			Sound.playTone(800, 50);
+			sleep(10);
+			Sound.playTone(800, 50);
+			sleep(10);
+			Sound.playTone(800, 50);
+			sleep(10);
+			Sound.playTone(800, 50);
+			sleep(10);
+			Sound.playTone(800, 50);
+			sleep(10);
+			Sound.playTone(800, 50);
 			break;
 		}
     	
