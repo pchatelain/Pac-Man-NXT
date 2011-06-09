@@ -6,7 +6,7 @@ import java.io.InputStream;
 import lejos.nxt.comm.Bluetooth;
 import lejos.nxt.comm.NXTConnection;
 
-public class BTReceiver {
+public class BTReceiver implements Instructor {
 
 	public static final int U_TURN = 255;
 	public static final int RIGHT = 254;
@@ -17,26 +17,40 @@ public class BTReceiver {
 	
 	private InputStream in;
 	
-	public BTReceiver() {
-		LineDisplayWriter.setLine("Waiting for", 0);
-		LineDisplayWriter.setLine("connection...", 1);
-		NXTConnection connection = Bluetooth.waitForConnection();
+	public boolean waitForConnection(int timeout) {
+		NXTConnection connection = Bluetooth.waitForConnection(timeout, 0);
+		if(connection == null)
+			return false;
 		in = connection.openInputStream();
+		return true;
 	}
 	
-	public Instruction nextInstruction() throws IOException {
-		if (in.available() == 0)
-			return Instruction.NONE;
-		switch (in.read()) {
-		case -1: return Instruction.EOT;
-		case U_TURN: return Instruction.U_TURN;
-		case RIGHT: return Instruction.RIGHT;
-		case LEFT: return Instruction.LEFT;
-		case DOT: return Instruction.DOT;
-		case START: return Instruction.START;
-		case STOP: return Instruction.STOP;
-		default: return Instruction.UNKNOWN;
+	private Instruction nextInstruction = Instruction.NONE;
+	
+	public Instruction next() {
+		if(nextInstruction == Instruction.NONE)
+			peek();
+		return nextInstruction;
+	}
+	
+	public Instruction peek() {
+		try {
+			if (in.available() == 0)
+				return Instruction.NONE;
+			switch (in.read()) {
+			case -1: return nextInstruction = Instruction.EOT;
+			case U_TURN: return nextInstruction = Instruction.U_TURN;
+			case RIGHT: return nextInstruction = Instruction.RIGHT;
+			case LEFT: return nextInstruction = Instruction.LEFT;
+			case DOT: return nextInstruction = Instruction.DOT;
+			case START: return nextInstruction = Instruction.START;
+			case STOP: return nextInstruction = Instruction.STOP;
+			default: return nextInstruction = Instruction.UNKNOWN;
+			}
+		} catch (IOException e) {
+			System.exit(1);
 		}
+		return Instruction.NONE;
 	}
 	
 	public void close() throws IOException {
