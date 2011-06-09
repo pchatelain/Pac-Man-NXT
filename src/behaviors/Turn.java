@@ -56,7 +56,7 @@ public class Turn implements Behavior, Configurable {
 		greyCount = Math.max(0, greyCount);
     	LineDisplayWriter.setLine("Light: "+right+"  "+left, 6, true);
     	int threshhold = thresh;
-		return greyCount > threshhold;
+		return (greyCount > threshhold) && false;
     }
 
     public void suppress() {
