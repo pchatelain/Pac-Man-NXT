@@ -3,6 +3,7 @@ package behaviors;
 import io.LineDisplayWriter;
 import lejos.nxt.Sound;
 import lejos.robotics.subsumption.Behavior;
+import robot.LineFollower;
 import sensors.DoubleSensor;
 import tools.Car;
 import tools.Configurable;
@@ -18,6 +19,7 @@ public class Turn implements Behavior, Configurable {
 
 //	private Direction[] sequence = {Direction.FORWARD};
 	private Direction[] sequence = {
+<<<<<<< HEAD
 //			Direction.FORWARD, Direction.FORWARD,
 	Direction.RIGHT,Direction.FORWARD,Direction.FORWARD};
 //			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
@@ -30,6 +32,20 @@ public class Turn implements Behavior, Configurable {
 //			Direction.FORWARD, Direction.LEFT, Direction.LEFT,Direction.FORWARD, 
 //			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
 //			Direction.RIGHT};
+=======
+			Direction.FORWARD, Direction.FORWARD,
+			Direction.RIGHT,
+			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
+			Direction.FORWARD, Direction.LEFT, Direction.LEFT, Direction.FORWARD, 
+			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
+			Direction.FORWARD, Direction.LEFT, Direction.FORWARD,
+			Direction.FORWARD, Direction.FORWARD,
+			Direction.FORWARD, Direction.LEFT, Direction.FORWARD,
+			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
+			Direction.FORWARD, Direction.LEFT, Direction.LEFT,Direction.FORWARD, 
+			Direction.FORWARD, Direction.FORWARD, Direction.FORWARD, Direction.FORWARD,
+			Direction.RIGHT};
+>>>>>>> 0f8b3539078db2c8cb76f6fe425711cb1fd591b0
 	private int seqPos = 0;
 	
     public Turn(DoubleSensor sensor) {
@@ -39,26 +55,37 @@ public class Turn implements Behavior, Configurable {
         conf.listen();
     }
     
+<<<<<<< HEAD
     private int greyCount = 0;
     private int thresh = 5;
     private int min = 75;
     private int max = 140;
     private int diff = 18;
+=======
+    private static int greyCount = 0;
+    private static int thresh = 5;
+    private static int min = 95;
+    private static int max = 190;
+    private static int diff = 11;
+>>>>>>> 0f8b3539078db2c8cb76f6fe425711cb1fd591b0
 
     private long shortDist = 785;
     public boolean takeControl() {
     	int left = sensor.getLeftNormalized();
     	int right = sensor.getRightNormalized();
-		greyCount--;
-    	if(Math.abs(left-right) < diff)
-    		if(min < left+right && left+right < max)
-    			greyCount += 2;
-		greyCount = Math.max(0, greyCount);
+    	if(isGrey(left, right))
+			greyCount++;
+    	else if(greyCount > 0)
+    		greyCount--;
     	LineDisplayWriter.setLine("Light: "+right+"  "+left, 6, true);
     	int threshhold = thresh;
 		return (greyCount > threshhold) && false;
     }
-
+    
+    public static boolean isGrey(int left, int right) {
+    	return Math.abs(left-right) < diff && min < left+right && left+right < max;
+    }
+    
     public void suppress() {
     	suppressed = true;
     }
@@ -76,17 +103,20 @@ public class Turn implements Behavior, Configurable {
     	suppressed = false;
     	switch(sequence[seqPos]) {
     	case FORWARD:
-    		Car.forward(meanPower, meanPower);
+    		if(LineFollower.motor)
+    			Car.forward(meanPower, meanPower);
     		Sound.playTone(400, 100);
     		sleep(50);
     		break;
     	case LEFT:
-    		Car.forward(lowPower, fullPower);
+    		if(LineFollower.motor)
+    			Car.forward(lowPower, fullPower);
     		Sound.playTone(250, 100);
     		sleep(sleep);
     		break;
     	case RIGHT:
-    		Car.forward(fullPower, lowPower);
+    		if(LineFollower.motor)
+    			Car.forward(fullPower, lowPower);
     		Sound.playTone(600, 100);
     		sleep(sleep);
     		break;

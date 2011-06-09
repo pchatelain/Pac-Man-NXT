@@ -12,7 +12,7 @@ import behaviors.Turn;
 
 public class LineFollower {
 	
-
+	public static boolean motor = true;
 	public static void main(String[] args) {
     	Sound.setVolume(80);
     	
