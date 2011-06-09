@@ -47,7 +47,7 @@ public class Robot {
 			while(!receiver.next().equals(Instruction.START));
 			instructor = receiver;
 		} else {
-			instructor = new StaticInstructor(0);
+			instructor = new StaticInstructor(1);
 			for(int i = 3; i > 0; i--) {
 				Sound.playTone(800, 200, 40);
 				LineDisplayWriter.setLine("Starting in "+i+"s", 0, true);

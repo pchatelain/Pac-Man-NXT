@@ -31,7 +31,7 @@ public class Turn implements Behavior, Configurable {
     private static int diff = 18;
 	
 	private int highPower = 85;
-	private int lowPower = -28;
+	private int lowPower = -50;
 
     private long repeatThreshhold = 650;
     private long lastRun = 0;

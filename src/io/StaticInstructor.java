@@ -7,9 +7,19 @@ public class StaticInstructor implements Instructor {
 			Instruction.RIGHT, Instruction.RIGHT,
 			Instruction.FORWARD, Instruction.LEFT, Instruction.FORWARD, Instruction.RIGHT,
 			Instruction.RIGHT, Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD, 
+			Instruction.RIGHT},{
+			Instruction.RIGHT, Instruction.FORWARD, Instruction.FORWARD,
+			Instruction.RIGHT, Instruction.RIGHT, Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD,
+			Instruction.LEFT, Instruction.FORWARD, Instruction.FORWARD, Instruction.LEFT, 
+			Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD, Instruction.LEFT,
+			Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD,
+			Instruction.FORWARD, Instruction.LEFT, Instruction.FORWARD, Instruction.FORWARD, Instruction.LEFT,
+			Instruction.FORWARD, Instruction.FORWARD, Instruction.LEFT, Instruction.FORWARD,Instruction.RIGHT,
+			Instruction.FORWARD, Instruction.LEFT, Instruction.FORWARD, Instruction.RIGHT,
+			Instruction.RIGHT, Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD, 
 			Instruction.RIGHT}};
 	
-	private int sequence = 0;
+	private int sequence;
 	private int sequencePosition = 0;
 	
 	public StaticInstructor(int sequence) {
