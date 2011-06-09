@@ -1,3 +1,0 @@
-@pushd "%~dp0"
-nxj -b -d INKY -cp .;..\bin %1%
-@popd

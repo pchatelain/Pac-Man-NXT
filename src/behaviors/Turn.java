@@ -15,9 +15,6 @@ public class Turn implements Behavior, Configurable {
 	private DoubleSensor sensor;
 	private Instructor instructor;
 	
-	private int fullPower = 100;
-	private int lowPower = -60;
-	
     public Turn(DoubleSensor sensor, Instructor instructor) {
     	this.sensor = sensor;
     	this.instructor = instructor;
@@ -31,8 +28,13 @@ public class Turn implements Behavior, Configurable {
     private static int min = 75;
     private static int max = 140;
     private static int diff = 18;
+	
+	private int fullPower = 100;
+	private int lowPower = -60;
 
-    private long shortDist = 785;
+    private long repeatThreshhold = 785;
+    private long lastRun = 0;
+    
     public boolean takeControl() {
     	int left = sensor.getLeftNormalized();
     	int right = sensor.getRightNormalized();
@@ -42,9 +44,13 @@ public class Turn implements Behavior, Configurable {
     	else if(greyCount > 0)
     		greyCount--;
     	LineDisplayWriter.setLine("Light: "+right+"  "+left, 1, true);
-		if(greyCount > threshhold) {
+		if(greyCount > threshhold
+		&& System.currentTimeMillis() - lastRun < repeatThreshhold) {
+	    	lastRun = System.currentTimeMillis();
+	    	
 			Instruction peek = instructor.peek();
 	    	LineDisplayWriter.setLine("Instr.: "+peek, 2, true);
+	    	
 			if(peek == Instruction.START
 			|| peek == Instruction.FORWARD
 			|| peek == Instruction.DOT) {
@@ -63,12 +69,7 @@ public class Turn implements Behavior, Configurable {
     	suppressed = true;
     }
     
-    private long lastRun = 0;
-    private long repeatThreshhold = shortDist;
     public void action() {
-    	if(System.currentTimeMillis() - lastRun < repeatThreshhold)
-    		return;
-    	lastRun = System.currentTimeMillis();
     	suppressed = false;
 
     	int left = sensor.getLeftNormalized();
