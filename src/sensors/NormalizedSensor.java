@@ -3,13 +3,13 @@ package sensors;
 import lejos.nxt.LightSensor;
 import lejos.nxt.SensorPort;
 
-public class BlackWhiteSensor {
+public class NormalizedSensor {
 
    private LightSensor sensor; 
    public int blackLightValue;
    public int whiteLightValue;
    
-   public BlackWhiteSensor(SensorPort p) {
+   public NormalizedSensor(SensorPort p) {
 	   sensor = new LightSensor(p); 
 	   sensor.setFloodlight(true);
    }

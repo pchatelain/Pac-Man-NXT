@@ -5,12 +5,12 @@ import lejos.nxt.Button;
 import lejos.nxt.SensorPort;
 
 public class DoubleSensor {
-	private BlackWhiteSensor rightSensor;
-	private BlackWhiteSensor leftSensor;
+	private NormalizedSensor rightSensor;
+	private NormalizedSensor leftSensor;
 
 	public DoubleSensor(SensorPort leftPort, SensorPort rightPort) {
-		leftSensor = new BlackWhiteSensor(leftPort);
-		rightSensor = new BlackWhiteSensor(rightPort);
+		leftSensor = new NormalizedSensor(leftPort);
+		rightSensor = new NormalizedSensor(rightPort);
 	}
 
 	public void calibrate() {

@@ -7,13 +7,6 @@ import lejos.nxt.comm.Bluetooth;
 import lejos.nxt.comm.NXTConnection;
 
 public class BTReceiver implements Instructor {
-
-	public static final int U_TURN = 255;
-	public static final int RIGHT = 254;
-	public static final int LEFT = 253;
-	public static final int DOT = 252;
-	public static final int START = 251;
-	public static final int STOP = 250;
 	
 	private InputStream in;
 	
@@ -39,12 +32,12 @@ public class BTReceiver implements Instructor {
 				return Instruction.NONE;
 			switch (in.read()) {
 			case -1: return nextInstruction = Instruction.EOT;
-			case U_TURN: return nextInstruction = Instruction.U_TURN;
-			case RIGHT: return nextInstruction = Instruction.RIGHT;
-			case LEFT: return nextInstruction = Instruction.LEFT;
-			case DOT: return nextInstruction = Instruction.DOT;
-			case START: return nextInstruction = Instruction.START;
-			case STOP: return nextInstruction = Instruction.STOP;
+			case 255: return nextInstruction = Instruction.U_TURN;
+			case 254: return nextInstruction = Instruction.RIGHT;
+			case 253: return nextInstruction = Instruction.LEFT;
+			case 252: return nextInstruction = Instruction.DOT;
+			case 251: return nextInstruction = Instruction.START;
+			case 250: return nextInstruction = Instruction.STOP;
 			default: return nextInstruction = Instruction.UNKNOWN;
 			}
 		} catch (IOException e) {
