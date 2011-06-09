@@ -6,7 +6,7 @@ public class StaticInstructor implements Instructor {
 	private Instruction[][] sequences = {{
 			Instruction.RIGHT, Instruction.RIGHT,
 			Instruction.FORWARD, Instruction.LEFT, Instruction.FORWARD, Instruction.RIGHT,
-			Instruction.RIGHT, Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD, 
+			Instruction.RIGHT, Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD, Instruction.FORWARD, 
 			Instruction.RIGHT}};
 	
 	private int sequence = 0;
@@ -19,9 +19,7 @@ public class StaticInstructor implements Instructor {
 	public Instruction next() {
     	if(sequencePosition == sequences[sequence].length)
     		sequencePosition = 0;
-    	Instruction ret = sequences[sequence][sequencePosition];
-    	sequencePosition++;
-		return ret;
+    	return sequences[sequence][sequencePosition++];
 	}
 	
 	public Instruction peek() {

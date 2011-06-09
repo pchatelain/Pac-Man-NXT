@@ -24,20 +24,41 @@ public class Robot {
 		
 		BTReceiver receiver = new BTReceiver();
 		
-		LineDisplayWriter.setLine("Press ENTER to", 0);
-		LineDisplayWriter.setLine("start or wait for", 1);
-		LineDisplayWriter.setLine("Bluetooth conn.", 2);
+		LineDisplayWriter.setLine("Press <ENTER> to", 0);
+		LineDisplayWriter.setLine("start.", 1);
+		LineDisplayWriter.setLine("Press <LEFT> for", 2);
+		LineDisplayWriter.setLine("Bluetooth conn.", 3);
 		LineDisplayWriter.refresh();
 		boolean bluetooth = false;
-		while(!Button.ENTER.isPressed() || (bluetooth = receiver.waitForConnection(100)));
+		while(!Button.ENTER.isPressed() && !(bluetooth = Button.LEFT.isPressed()));
 		LineDisplayWriter.clear();
 		
 		Instructor instructor; 
 		if(bluetooth) {
+			boolean escape = false;
+			LineDisplayWriter.setLine("Waiting for", 0);
+			LineDisplayWriter.setLine("Bluetooth conn.", 1);
+			LineDisplayWriter.setLine("Press <ESCAPE>", 2);
+			LineDisplayWriter.setLine("to cancel.", 3);
+			LineDisplayWriter.refresh();
+			while(!(escape = Button.ESCAPE.isPressed()) || receiver.waitForConnection(100));
+			if(escape)
+				System.exit(0);
 			while(!receiver.next().equals(Instruction.START));
 			instructor = receiver;
 		} else {
 			instructor = new StaticInstructor(0);
+			for(int i = 3; i > 0; i--) {
+				Sound.playTone(800, 200, 40);
+				LineDisplayWriter.setLine("Starting in "+i+"s", 0, true);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					System.exit(1);
+				}
+			}
+			Sound.playTone(800, 800, 40);
+			LineDisplayWriter.clear();
 		}
 		
 		Behavior b1 = new DriveForward2Sensors(sensor);
