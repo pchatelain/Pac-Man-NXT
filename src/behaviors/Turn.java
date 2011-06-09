@@ -21,7 +21,7 @@ public class Turn implements Behavior, Configurable {
     public Turn(DoubleSensor sensor, Instructor instructor) {
     	this.sensor = sensor;
     	this.instructor = instructor;
-//    	String[] settings = {"thresh", "min", "max", "diff", "sleep"};
+//    	String[] settings = {"thresh", "min", "max", "diff"};
 //        Configurator conf = new Configurator(this, settings);
 //        conf.listen();
     }
@@ -41,12 +41,15 @@ public class Turn implements Behavior, Configurable {
 			greyCount++;
     	else if(greyCount > 0)
     		greyCount--;
-    	LineDisplayWriter.setLine("Light: "+right+"  "+left, 6, true);
+    	LineDisplayWriter.setLine("Light: "+right+"  "+left, 1, true);
 		if(greyCount > threshhold) {
 			Instruction peek = instructor.peek();
+	    	LineDisplayWriter.setLine("Instr.: "+peek, 2, true);
 			if(peek == Instruction.START
 			|| peek == Instruction.FORWARD
 			|| peek == Instruction.DOT) {
+				instructor.next();
+				Sound.playTone(400, 100);
 		    	greyCount = 0;
 		    	return false;
 			}
@@ -62,7 +65,6 @@ public class Turn implements Behavior, Configurable {
     
     private long lastRun = 0;
     private long repeatThreshhold = shortDist;
-    private int sleep = 300;
     public void action() {
     	if(System.currentTimeMillis() - lastRun < repeatThreshhold)
     		return;
@@ -75,16 +77,18 @@ public class Turn implements Behavior, Configurable {
 		case LEFT:
 			Car.forward(lowPower, fullPower);
 			Sound.playTone(250, 100);
-			while(left > 40) {
+			while(left < 45 || 45 < right) {
 		    	left = sensor.getLeftNormalized();
+				right = sensor.getRightNormalized();
 				sleep(10);
 			}
 			break;
 		case RIGHT:
 			Car.forward(fullPower, lowPower);
 			Sound.playTone(600, 100);
-			while(right > 40) {
-				right = sensor.getLeftNormalized();
+			while(left > 45 || 45 > right) {
+		    	left = sensor.getLeftNormalized();
+				right = sensor.getRightNormalized();
 				sleep(10);
 			}
 			break;
@@ -95,21 +99,15 @@ public class Turn implements Behavior, Configurable {
 		case EOT:
 			Car.stop();
 			Sound.playTone(500, 100);
+			sleep(100);
 			Sound.playTone(100, 100);
 			System.exit(0);
 		default:
 			Car.stop();
-			Sound.playTone(800, 50);
-			sleep(10);
-			Sound.playTone(800, 50);
-			sleep(10);
-			Sound.playTone(800, 50);
-			sleep(10);
-			Sound.playTone(800, 50);
-			sleep(10);
-			Sound.playTone(800, 50);
-			sleep(10);
-			Sound.playTone(800, 50);
+			for(int i = 0; i < 5; i++) {
+				Sound.playTone(800, 50);
+				sleep(55);
+			}
 			break;
 		}
     	
@@ -137,8 +135,6 @@ public class Turn implements Behavior, Configurable {
 			max--;break;
 		case 3:
 			diff--;break;
-		case 4:
-			sleep--;break;
 		}
 	}
 
@@ -153,8 +149,6 @@ public class Turn implements Behavior, Configurable {
 			return max+"";
 		case 3:
 			return diff+"";
-		case 4:
-			return sleep+"";
 		}
 		return null;
 	}
@@ -169,8 +163,6 @@ public class Turn implements Behavior, Configurable {
 			max++;break;
 		case 3:
 			diff++;break;
-		case 4:
-			sleep++;break;
 		}
 	}
 }
